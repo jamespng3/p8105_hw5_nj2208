@@ -1,5 +1,5 @@
 ---
-title: "hw_05"
+title: "P8105_HW_05"
 author: "James Ng"
 date: "11/7/2019"
 output: github_document
@@ -26,7 +26,8 @@ theme_set(theme_minimal() + theme(legend.position = "bottom"))
 
 ## Problem 1
 
-```{r}
+* Problem Setup
+```{r iris}
 set.seed(10)
 
 iris_with_missing = iris %>% 
@@ -34,7 +35,8 @@ iris_with_missing = iris %>%
   mutate(Species = as.character(Species))
 ```
 
-```{r}
+* function code for filling in missing values
+```{r function}
 fill_in = function(x) {
   
   if (!is.numeric(x)) {
@@ -46,7 +48,27 @@ fill_in = function(x) {
 }
 ```
 
-```{r}
+* map function to fill in the missing values
+```{r iris full}
 iris_full=map(iris_with_missing,fill_in)
 ```
+
+## Problem 2
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
