@@ -55,8 +55,39 @@ iris_full=map(iris_with_missing,fill_in)
 
 ## Problem 2
 
+```{r vector of csv}
+vec_csv = str_c("./data/",list.files("./data"))
+```
 
+```{r function_2}
+study_tidy = function(arm) {
+  
+  x = read_csv(arm)
+  
+  x %>% 
+    janitor::clean_names() %>% 
+    pivot_longer(
+      week_1:week_8,
+      names_to = "week",
+      values_to = "observation"
+      )
+  
+}
+```
 
+```{r one tibble}
+study = 
+  tibble(
+    vec_csv = str_c("./data/",list.files("./data"))
+  ) %>% 
+  mutate(
+    output = map(vec_csv, study_tidy),
+    vec_csv = str_remove(vec_csv,"./data/"),
+    vec_csv = str_remove(vec_csv,".csv")
+  ) %>% 
+  unnest(output) %>% 
+  separate(vec_csv,c("arm","subject"),sep = "_",remove = TRUE)
+```
 
 
 

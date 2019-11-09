@@ -42,3 +42,258 @@ iris_full=map(iris_with_missing,fill_in)
 ```
 
 ## Problem 2
+
+``` r
+vec_csv = str_c("./data/",list.files("./data"))
+```
+
+``` r
+study_tidy = function(arm) {
+  
+  x = read_csv(arm)
+  
+  x %>% 
+    janitor::clean_names() %>% 
+    pivot_longer(
+      week_1:week_8,
+      names_to = "week",
+      values_to = "observation"
+      )
+  
+}
+```
+
+``` r
+study = 
+  tibble(
+    vec_csv = str_c("./data/",list.files("./data"))
+  ) %>% 
+  mutate(
+    output = map(vec_csv, study_tidy),
+    vec_csv = str_remove(vec_csv,"./data/"),
+    vec_csv = str_remove(vec_csv,".csv")
+  ) %>% 
+  unnest(output) %>% 
+  separate(vec_csv,c("arm","subject"),sep = "_",remove = TRUE)
+```
+
+    ## Parsed with column specification:
+    ## cols(
+    ##   week_1 = col_double(),
+    ##   week_2 = col_double(),
+    ##   week_3 = col_double(),
+    ##   week_4 = col_double(),
+    ##   week_5 = col_double(),
+    ##   week_6 = col_double(),
+    ##   week_7 = col_double(),
+    ##   week_8 = col_double()
+    ## )
+    ## Parsed with column specification:
+    ## cols(
+    ##   week_1 = col_double(),
+    ##   week_2 = col_double(),
+    ##   week_3 = col_double(),
+    ##   week_4 = col_double(),
+    ##   week_5 = col_double(),
+    ##   week_6 = col_double(),
+    ##   week_7 = col_double(),
+    ##   week_8 = col_double()
+    ## )
+    ## Parsed with column specification:
+    ## cols(
+    ##   week_1 = col_double(),
+    ##   week_2 = col_double(),
+    ##   week_3 = col_double(),
+    ##   week_4 = col_double(),
+    ##   week_5 = col_double(),
+    ##   week_6 = col_double(),
+    ##   week_7 = col_double(),
+    ##   week_8 = col_double()
+    ## )
+    ## Parsed with column specification:
+    ## cols(
+    ##   week_1 = col_double(),
+    ##   week_2 = col_double(),
+    ##   week_3 = col_double(),
+    ##   week_4 = col_double(),
+    ##   week_5 = col_double(),
+    ##   week_6 = col_double(),
+    ##   week_7 = col_double(),
+    ##   week_8 = col_double()
+    ## )
+    ## Parsed with column specification:
+    ## cols(
+    ##   week_1 = col_double(),
+    ##   week_2 = col_double(),
+    ##   week_3 = col_double(),
+    ##   week_4 = col_double(),
+    ##   week_5 = col_double(),
+    ##   week_6 = col_double(),
+    ##   week_7 = col_double(),
+    ##   week_8 = col_double()
+    ## )
+    ## Parsed with column specification:
+    ## cols(
+    ##   week_1 = col_double(),
+    ##   week_2 = col_double(),
+    ##   week_3 = col_double(),
+    ##   week_4 = col_double(),
+    ##   week_5 = col_double(),
+    ##   week_6 = col_double(),
+    ##   week_7 = col_double(),
+    ##   week_8 = col_double()
+    ## )
+    ## Parsed with column specification:
+    ## cols(
+    ##   week_1 = col_double(),
+    ##   week_2 = col_double(),
+    ##   week_3 = col_double(),
+    ##   week_4 = col_double(),
+    ##   week_5 = col_double(),
+    ##   week_6 = col_double(),
+    ##   week_7 = col_double(),
+    ##   week_8 = col_double()
+    ## )
+    ## Parsed with column specification:
+    ## cols(
+    ##   week_1 = col_double(),
+    ##   week_2 = col_double(),
+    ##   week_3 = col_double(),
+    ##   week_4 = col_double(),
+    ##   week_5 = col_double(),
+    ##   week_6 = col_double(),
+    ##   week_7 = col_double(),
+    ##   week_8 = col_double()
+    ## )
+    ## Parsed with column specification:
+    ## cols(
+    ##   week_1 = col_double(),
+    ##   week_2 = col_double(),
+    ##   week_3 = col_double(),
+    ##   week_4 = col_double(),
+    ##   week_5 = col_double(),
+    ##   week_6 = col_double(),
+    ##   week_7 = col_double(),
+    ##   week_8 = col_double()
+    ## )
+    ## Parsed with column specification:
+    ## cols(
+    ##   week_1 = col_double(),
+    ##   week_2 = col_double(),
+    ##   week_3 = col_double(),
+    ##   week_4 = col_double(),
+    ##   week_5 = col_double(),
+    ##   week_6 = col_double(),
+    ##   week_7 = col_double(),
+    ##   week_8 = col_double()
+    ## )
+    ## Parsed with column specification:
+    ## cols(
+    ##   week_1 = col_double(),
+    ##   week_2 = col_double(),
+    ##   week_3 = col_double(),
+    ##   week_4 = col_double(),
+    ##   week_5 = col_double(),
+    ##   week_6 = col_double(),
+    ##   week_7 = col_double(),
+    ##   week_8 = col_double()
+    ## )
+    ## Parsed with column specification:
+    ## cols(
+    ##   week_1 = col_double(),
+    ##   week_2 = col_double(),
+    ##   week_3 = col_double(),
+    ##   week_4 = col_double(),
+    ##   week_5 = col_double(),
+    ##   week_6 = col_double(),
+    ##   week_7 = col_double(),
+    ##   week_8 = col_double()
+    ## )
+    ## Parsed with column specification:
+    ## cols(
+    ##   week_1 = col_double(),
+    ##   week_2 = col_double(),
+    ##   week_3 = col_double(),
+    ##   week_4 = col_double(),
+    ##   week_5 = col_double(),
+    ##   week_6 = col_double(),
+    ##   week_7 = col_double(),
+    ##   week_8 = col_double()
+    ## )
+    ## Parsed with column specification:
+    ## cols(
+    ##   week_1 = col_double(),
+    ##   week_2 = col_double(),
+    ##   week_3 = col_double(),
+    ##   week_4 = col_double(),
+    ##   week_5 = col_double(),
+    ##   week_6 = col_double(),
+    ##   week_7 = col_double(),
+    ##   week_8 = col_double()
+    ## )
+    ## Parsed with column specification:
+    ## cols(
+    ##   week_1 = col_double(),
+    ##   week_2 = col_double(),
+    ##   week_3 = col_double(),
+    ##   week_4 = col_double(),
+    ##   week_5 = col_double(),
+    ##   week_6 = col_double(),
+    ##   week_7 = col_double(),
+    ##   week_8 = col_double()
+    ## )
+    ## Parsed with column specification:
+    ## cols(
+    ##   week_1 = col_double(),
+    ##   week_2 = col_double(),
+    ##   week_3 = col_double(),
+    ##   week_4 = col_double(),
+    ##   week_5 = col_double(),
+    ##   week_6 = col_double(),
+    ##   week_7 = col_double(),
+    ##   week_8 = col_double()
+    ## )
+    ## Parsed with column specification:
+    ## cols(
+    ##   week_1 = col_double(),
+    ##   week_2 = col_double(),
+    ##   week_3 = col_double(),
+    ##   week_4 = col_double(),
+    ##   week_5 = col_double(),
+    ##   week_6 = col_double(),
+    ##   week_7 = col_double(),
+    ##   week_8 = col_double()
+    ## )
+    ## Parsed with column specification:
+    ## cols(
+    ##   week_1 = col_double(),
+    ##   week_2 = col_double(),
+    ##   week_3 = col_double(),
+    ##   week_4 = col_double(),
+    ##   week_5 = col_double(),
+    ##   week_6 = col_double(),
+    ##   week_7 = col_double(),
+    ##   week_8 = col_double()
+    ## )
+    ## Parsed with column specification:
+    ## cols(
+    ##   week_1 = col_double(),
+    ##   week_2 = col_double(),
+    ##   week_3 = col_double(),
+    ##   week_4 = col_double(),
+    ##   week_5 = col_double(),
+    ##   week_6 = col_double(),
+    ##   week_7 = col_double(),
+    ##   week_8 = col_double()
+    ## )
+    ## Parsed with column specification:
+    ## cols(
+    ##   week_1 = col_double(),
+    ##   week_2 = col_double(),
+    ##   week_3 = col_double(),
+    ##   week_4 = col_double(),
+    ##   week_5 = col_double(),
+    ##   week_6 = col_double(),
+    ##   week_7 = col_double(),
+    ##   week_8 = col_double()
+    ## )
