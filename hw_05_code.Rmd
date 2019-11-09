@@ -75,7 +75,7 @@ study_tidy = function(arm) {
 }
 ```
 
-```{r one tibble}
+```{r one tibble,message=FALSE}
 study = 
   tibble(
     vec_csv = str_c("./data/",list.files("./data"))
@@ -86,9 +86,19 @@ study =
     vec_csv = str_remove(vec_csv,".csv")
   ) %>% 
   unnest(output) %>% 
-  separate(vec_csv,c("arm","subject"),sep = "_",remove = TRUE)
+  #separate(vec_csv,c("arm","subject"),sep = "_",remove = TRUE) %>% 
+  mutate(
+    week = str_remove(week,"week_"),
+    week=as.numeric(week)
+  )
 ```
 
+```{r}
+study %>% 
+  #group_by(arm,subject) %>% 
+  ggplot(aes(x=week,y=observation,color=vec_csv))+
+  geom_line()
+```
 
 
 
