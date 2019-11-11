@@ -44,10 +44,6 @@ iris_full=map(iris_with_missing,fill_in)
 ## Problem 2
 
 ``` r
-vec_csv = str_c("./data/",list.files("./data"))
-```
-
-``` r
 study_tidy = function(arm) {
   
   x = read_csv(arm)
@@ -66,26 +62,93 @@ study_tidy = function(arm) {
 ``` r
 study = 
   tibble(
-    vec_csv = str_c("./data/",list.files("./data"))
+    subject = str_c("./data/",list.files("./data"))
   ) %>% 
   mutate(
-    output = map(vec_csv, study_tidy),
-    vec_csv = str_remove(vec_csv,"./data/"),
-    vec_csv = str_remove(vec_csv,".csv")
+    output = map(subject, study_tidy),
+    subject = str_remove(subject,"./data/"),
+    subject = str_remove(subject,".csv"),
   ) %>% 
   unnest(output) %>% 
-  #separate(vec_csv,c("arm","subject"),sep = "_",remove = TRUE) %>% 
+  #separate(subject,c("group","subject")) %>% 
   mutate(
     week = str_remove(week,"week_"),
-    week=as.numeric(week)
+    week = as.numeric(week)
   )
 ```
 
 ``` r
-study %>% 
-  #group_by(arm,subject) %>% 
-  ggplot(aes(x=week,y=observation,color=vec_csv))+
-  geom_line()
+study %>%  
+  ggplot(aes(x=week,y=observation,color=subject))+
+  geom_line()+
+  labs(
+    title = "Changes in Observations Over Weeks By Subject")
 ```
 
 <img src="hw_05_code_files/figure-gfm/unnamed-chunk-1-1.png" width="90%" />
+
+This plot makes it hard to separate the groups to see the trends so I
+faceted the plot into the two arms.
+
+``` r
+study2=study %>% 
+  mutate(
+   arm=subject,
+  ) %>% 
+  separate(arm,"arm",sep = "_")
+  
+study2 %>%  
+  ggplot(aes(x=week,y=observation,color=subject))+
+  geom_line()+
+  facet_grid(~arm)+
+  labs(
+    title = "Changes in Observations Over Weeks By Subject and Group")
+```
+
+<img src="hw_05_code_files/figure-gfm/unnamed-chunk-2-1.png" width="90%" />
+
+This chart lets us see that the experimental arm’s observational data is
+increasing in value over the weeks whereas the values are mostly
+constant in the control arm. We do not know what the data describes so
+we cannot determine if this is a good change or not.
+
+## Problem 3
+
+``` r
+set.seed(1)
+
+sim_regression = function(n=30, beta0 = 2, beta1 = 0) {
+  
+  sim_data = tibble(
+    x = rnorm(n, mean = 1, sd = 1),
+    y = beta0 + beta1 * x + rnorm(n, 0, 50)
+  )
+  
+  ls_fit = lm(y ~ x, data = sim_data)
+  broom::tidy(ls_fit)
+  #tibble(
+  #  beta0_hat = coef(ls_fit)[1],
+  #  beta1_hat = coef(ls_fit)[2]
+  #)
+}
+```
+
+``` r
+output = 
+  rerun(1, sim_regression(beta1 = 1)) %>% 
+  bind_rows() 
+#output %>%   ggplot(aes(x = beta0_hat)) + geom_density()
+```
+
+``` r
+sim_results = 
+  tibble(
+    beta1_val = c(0, 1, 2, 3,4,5,6)
+  ) %>% 
+  mutate(
+    output_list = map(.x = beta1_val, ~ rerun(10000, sim_regression(beta1 = .x))),
+    output_df = map(output_list, bind_rows)
+  ) %>% 
+  select(-output_list) %>% 
+  unnest(output_df)
+```
